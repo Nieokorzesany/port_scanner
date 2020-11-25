@@ -1,16 +1,29 @@
-# This is a sample Python script.
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import socket
+import termcolor
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def scan(target, ports):
+	print('\n' + ' Starting Scan For ' + str(target))
+	for port in range(1,ports):
+		scan_port(target,port)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+def scan_port(ipaddress, port):
+	try:
+		sock = socket.socket()
+		sock.connect((ipaddress, port))
+		print("[+] Port Opened " + str(port))
+		sock.close()
+	except:
+		pass
+
+
+targets = input("[*] Enter Targets To Scan(split them by ,): ")
+ports = int(input("[*] Enter How Many Ports You Want To Scan: "))
+if ',' in targets:
+	print(termcolor.colored(("[*] Scanning Multiple Targets"), 'green'))
+	for ip_addr in targets.split(','):
+		scan(ip_addr.strip(' '), ports)
+else:
+	scan(targets,ports)
